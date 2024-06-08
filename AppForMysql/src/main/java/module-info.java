@@ -7,6 +7,7 @@ module com.zwy.appformysql {
     requires org.kordamp.bootstrapfx.core;
     requires java.sql;
 
+
     opens com.zwy.appformysql to javafx.fxml;
     exports com.zwy.appformysql;
     exports com.zwy.appformysql.Controller;

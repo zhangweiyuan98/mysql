@@ -3,6 +3,7 @@ import com.zwy.appformysql.Config.ConfigurationReader;
 import com.zwy.appformysql.Helper.DatabaseHelper;
 
 
+import com.zwy.appformysql.mapper.ResultTableManager;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -76,50 +77,17 @@ public class mainController {
         System.out.println("点击了查询" + HotelCode.getText() + "d" + HotelName.getText());
 
 
-        DatabaseHelper f = new DatabaseHelper( "10.242.117.34", "portal_pms" ,"root",  "QRs0s9SZi7mk5dm4");
+        DatabaseHelper server = new DatabaseHelper( "182.40.37.163", "jeecg-boot" ,"root",  "Zhang1998..");
 
-        ResultSet resultSet = f.executeQuery("select hotel_group_id, id, code, sta, audit, descript, descript_en, descript_short from hotel limit 10;");
+        ResultSet result = server.executeQuery("\n" +
+                "SELECT * FROM `rep_demo_dxtj` LIMIT 10;");
 
-
-        ResultTable.getColumns().clear();
-        ResultTable.getItems().clear();
-
-        TableView<List<String>> tableView = new TableView<>();
-
-        setResultTable tableManager = new setResultTable(tableView);
-        ResultTable.getSelectionModel().setCellSelectionEnabled(true);
-        // 设置表格列
-        ResultSetMetaData metaData = resultSet.getMetaData();
-        int columnCount = metaData.getColumnCount();
-    // 添加行号列
-        TableColumn<List<String>, Integer> indexColumn = new TableColumn<>("#");
-        indexColumn.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<>(ResultTable.getItems().indexOf(cellData.getValue()) + 1));
-        ResultTable.getColumns().add(0, indexColumn); // 将行号列添加到第一个位置
-
-        // 动态生成表格列
-        for (int i = 1; i <= columnCount; i++) {
-            final int columnIndex = i;
-            TableColumn<List<String>, String> column = new TableColumn<>(metaData.getColumnName(i));
-            column.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().get(columnIndex - 1)));
-            ResultTable.getColumns().add(column);
-
-        }
-
-        // 更新表格数据
-
-        ObservableList<ObservableList<String>> data = FXCollections.observableArrayList();
-        while (resultSet.next()) {
-            ObservableList<String> row = FXCollections.observableArrayList();
-            for (int i = 1; i <= resultSet.getMetaData().getColumnCount(); i++) {
-                row.add(resultSet.getString(i));
-            }
-            ResultTable.getItems().add(row);
-        }
-
-        tableManager.updateTableView(data);
-        System.out.println(data);
-
-
+        ResultSetMetaData metaData = result.getMetaData();
+        List<String> columnNames = new ArrayList<>();
+        ResultTableManager manager = new ResultTableManager(ResultTable);
+        manager.setTableColumns(metaData, columnNames);
+        manager.updateTableItems(result);
+        ResultTable.setEditable(true);
 
 
     }
@@ -145,7 +113,7 @@ public class mainController {
 
     @FXML
     private void initialize() {
-        ConfigurationReader readerGroup = new ConfigurationReader("F:/App/AppForMysql/group.ini");
+        ConfigurationReader readerGroup = new ConfigurationReader("AppForMysql/group.ini");
         ObservableList<String> sectionNames = FXCollections.observableArrayList(readerGroup.getSectionNames());
         PCID.setItems(sectionNames);
         PCID.getItems().add("所有");
@@ -168,7 +136,7 @@ public class mainController {
 
             // 根据选择的配置文件名称获取对应的配置项
             try {
-                ConfigurationReader readerServer = new ConfigurationReader("F:/App/AppForMysql/" + selectedGroup + ".ini");
+                ConfigurationReader readerServer = new ConfigurationReader("AppForMysql/"+selectedGroup + ".ini");
                 ObservableList<String> configOption = FXCollections.observableArrayList(readerServer.getSectionNames());
                 // 清空第二个下拉菜单的选项
                 ServerName.setItems(configOption);
@@ -213,43 +181,7 @@ public class mainController {
     }
 
 
-    public class setResultTable {
-        @FXML
-        public TableView ResultTable;
 
-        public setResultTable(TableView<List<String>> resultTable) {
-            this.ResultTable = resultTable;
-        }
-
-        // 设置表格列
-
-        public void setTableColumns(List<String> columnNames) {
-            for (String columnName : columnNames) {
-                final int finalColumnIndex = ResultTable.getColumns().size(); // 使用size()作为索引
-                TableColumn<List<String>, String> column = new TableColumn<>(columnName);
-                column.setCellValueFactory(cellData -> {
-                    List<String> rowData = cellData.getValue();
-                    if (rowData != null && rowData.size() > finalColumnIndex) {
-                        return new SimpleStringProperty(rowData.get(finalColumnIndex));
-                    } else {
-                        return new SimpleStringProperty("");
-                    }
-                });
-                column.setPrefWidth(100); // 设置列宽以便看到内容
-                ResultTable.getColumns().add(column);
-            }
-
-            // 假设你有一个ObservableList<List<String>>的数据源
-            // resultTable.setItems(yourDataSource);
-        }
-
-
-
-        // 更新表格数据
-        public void updateTableView(ObservableList<ObservableList<String>> data) {
-            ResultTable.getItems().addAll(data);
-        }
-    }
 
 
 }

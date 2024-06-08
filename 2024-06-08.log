@@ -1,0 +1,36 @@
+6月 08, 2024 11:15:50 上午 com.zwy.appformysql.Helper.DatabaseHelper executeQuery
+信息: 执行查询SQL语句: 
+SELECT * FROM `rep_demo_dxtj` LIMIT 10;
+6月 08, 2024 11:20:48 上午 com.zwy.appformysql.Helper.DatabaseHelper executeQuery
+信息: 执行查询SQL语句: 
+SELECT * FROM `rep_demo_dxtj` LIMIT 10;
+6月 08, 2024 11:25:09 上午 com.zwy.appformysql.Helper.DatabaseHelper executeQuery
+信息: 执行查询SQL语句: 
+SELECT * FROM `rep_demo_dxtj` LIMIT 10;
+6月 08, 2024 11:25:56 上午 com.zwy.appformysql.Helper.DatabaseHelper executeQuery
+信息: 执行查询SQL语句: 
+SELECT * FROM `rep_demo_dxtj` LIMIT 10;
+6月 08, 2024 11:29:20 上午 com.zwy.appformysql.Helper.DatabaseHelper executeQuery
+信息: 执行查询SQL语句: 
+SELECT * FROM `rep_demo_dxtj` LIMIT 10;
+6月 08, 2024 11:29:38 上午 com.zwy.appformysql.Helper.DatabaseHelper executeQuery
+信息: 执行查询SQL语句: 
+SELECT * FROM `rep_demo_dxtj` LIMIT 10;
+6月 08, 2024 11:31:59 上午 com.zwy.appformysql.Helper.DatabaseHelper executeQuery
+信息: 执行查询SQL语句: 
+SELECT * FROM `rep_demo_dxtj` LIMIT 10;
+6月 08, 2024 11:32:27 上午 com.zwy.appformysql.Helper.DatabaseHelper executeQuery
+信息: 执行查询SQL语句: 
+SELECT * FROM `rep_demo_dxtj` LIMIT 10;
+6月 08, 2024 11:35:10 上午 com.zwy.appformysql.Helper.DatabaseHelper executeQuery
+信息: 执行查询SQL语句: 
+SELECT * FROM `rep_demo_dxtj` LIMIT 10;
+6月 08, 2024 11:35:52 上午 com.zwy.appformysql.Helper.DatabaseHelper executeQuery
+信息: 执行查询SQL语句: 
+SELECT * FROM `rep_demo_dxtj` LIMIT 10;
+6月 08, 2024 11:45:57 上午 com.zwy.appformysql.Helper.DatabaseHelper executeQuery
+信息: 执行查询SQL语句: 
+SELECT * FROM `rep_demo_dxtj` LIMIT 10;
+6月 08, 2024 11:47:38 上午 com.zwy.appformysql.Helper.DatabaseHelper executeQuery
+信息: 执行查询SQL语句: 
+SELECT * FROM `rep_demo_dxtj` LIMIT 10;
