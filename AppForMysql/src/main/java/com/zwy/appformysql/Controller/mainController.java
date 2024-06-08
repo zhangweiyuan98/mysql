@@ -19,6 +19,7 @@ import java.net.URL;
 import java.sql.*;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class mainController {
 
@@ -65,8 +66,6 @@ public class mainController {
     @FXML
     private TableView<List<String>> resultTable;
     @FXML
-//    private TableView ResultTable;
-//    private TableView<String> ResultTable;
     private void onHelloButtonClick() {
         welcomeText.setText("Welcome to JavaFX Application!");
     }
@@ -74,13 +73,66 @@ public class mainController {
 
     @FXML
     private void onSelectButtonClick() throws SQLException {
-        System.out.println("点击了查询" + HotelCode.getText() + "d" + HotelName.getText());
+
+        // 假设你有一个Map来存储字段和它们的值
+        Map<String, String> conditions = new HashMap<>();
+        conditions.put("CODE", HotelCode.getText().trim());
+        conditions.put("descript", HotelName.getText().trim());
+        conditions.put("id", HotelId.getText().trim());
+        conditions.put("brand_code", BrandCode.getText().trim());
+        // 过滤掉空值
+        List<String> nonEmptyConditions = conditions.entrySet().stream()
+                .filter(entry -> !entry.getValue().isEmpty())
+                .map(entry -> entry.getKey() + " = '" + entry.getValue() + "'")
+                .collect(Collectors.toList());
+
+        // 构建查询语句
+        String sql = "SELECT * FROM hotel WHERE " +
+                String.join(" AND ", nonEmptyConditions);
+
+        // 如果nonEmptyConditions为空，则可能需要处理这种情况
+        if (nonEmptyConditions.isEmpty()) {
+            // 没有添加任何条件，处理这种情况...
+            sql = "SELECT * FROM hotel limit "+Limit.getText(); // 或者抛出异常、返回空结果等
+        }
+        StringBuilder SqlConcat = new StringBuilder(sql);
+        SqlConcat.append(" ORDER BY id ;");
+
+        ConfigurationReader Server = new ConfigurationReader("AppForMysql/group.ini");
+        Set<String> sectionNames = Server.getSectionNames();
+        String pcidValue = PCID.getValue();
+        if ("所有".equals(pcidValue)) {
+            // 如果PCID的值为"所有"，则遍历所有节
+            for (String sectionName : sectionNames) {
+                // 假设每个节都有相同的数据库配置键（host, password, database, user）
+                String host = Server.getValue(sectionName, "host");
+                String password = Server.getValue(sectionName, "password");
+                String database = Server.getValue(sectionName, "database");
+                String user = Server.getValue(sectionName, "user");
+
+                // 执行数据库查询等操作...
+                Exsql(SqlConcat, host, password, database, user);
+
+            }
+        }else {
+
+                String host = Server.getValue(PCID.getValue(),"host");
+        //        String port = Server.getValue(PCID.getValue(),"port");
+                String password = Server.getValue(PCID.getValue(),"password");
+                String database = Server.getValue(PCID.getValue(),"database");
+                String user = Server.getValue(PCID.getValue(),"user");
+                Exsql(SqlConcat, host, password, database, user);
 
 
-        DatabaseHelper server = new DatabaseHelper( "182.40.37.163", "jeecg-boot" ,"root",  "Zhang1998..");
+        }
 
-        ResultSet result = server.executeQuery("\n" +
-                "SELECT * FROM `rep_demo_dxtj` LIMIT 10;");
+
+    }
+
+    private void Exsql(StringBuilder sqlConcat, String host, String password, String database, String user) throws SQLException {
+        DatabaseHelper server = new DatabaseHelper(host, database, user, password);
+
+        ResultSet result = server.executeQuery(String.valueOf(sqlConcat));
 
         ResultSetMetaData metaData = result.getMetaData();
         List<String> columnNames = new ArrayList<>();
@@ -88,10 +140,7 @@ public class mainController {
         manager.setTableColumns(metaData, columnNames);
         manager.updateTableItems(result);
         ResultTable.setEditable(true);
-
-
     }
-
 
 
     @FXML

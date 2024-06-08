@@ -195,7 +195,7 @@
                         <Font size="8.0" />
                      </font>
                   </Label>
-                  <TextField id="Limit" fx:id="Limit" alignment="TOP_LEFT" prefHeight="25.0" HBox.hgrow="ALWAYS" />
+                  <TextField id="Limit" fx:id="Limit" alignment="TOP_LEFT" prefHeight="25.0" HBox.hgrow="ALWAYS" text="100" />
                   <Button id="SelectButton" fx:id="SelectButton" alignment="CENTER" mnemonicParsing="false" onAction="#onSelectButtonClick" prefHeight="25.0" prefWidth="54.0" text="查询" HBox.hgrow="ALWAYS">
                      <font>
                         <Font size="8.0" />

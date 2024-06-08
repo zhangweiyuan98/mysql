@@ -34,3 +34,9 @@ SELECT * FROM `rep_demo_dxtj` LIMIT 10;
 6月 08, 2024 11:47:38 上午 com.zwy.appformysql.Helper.DatabaseHelper executeQuery
 信息: 执行查询SQL语句: 
 SELECT * FROM `rep_demo_dxtj` LIMIT 10;
+6月 08, 2024 1:00:38 下午 com.zwy.appformysql.Helper.DatabaseHelper executeQuery
+信息: 执行查询SQL语句: 
+SELECT * FROM `rep_demo_dxtj` LIMIT 10;
+6月 08, 2024 1:20:01 下午 com.zwy.appformysql.Helper.DatabaseHelper executeQuery
+信息: 执行查询SQL语句: 
+SELECT * FROM `rep_demo_dxtj` LIMIT 10;
