@@ -40,3 +40,36 @@ SELECT * FROM `rep_demo_dxtj` LIMIT 10;
 6月 08, 2024 1:20:01 下午 com.zwy.appformysql.Helper.DatabaseHelper executeQuery
 信息: 执行查询SQL语句: 
 SELECT * FROM `rep_demo_dxtj` LIMIT 10;
+6月 08, 2024 4:36:55 下午 com.zwy.appformysql.Helper.DatabaseHelper executeQuery
+信息: 执行查询SQL语句: SELECT * FROM `rep_demo_dxtj` LIMIT 10; 
+6月 08, 2024 4:38:59 下午 com.zwy.appformysql.Helper.DatabaseHelper executeQuery
+信息: 执行查询SQL语句: SELECT * FROM `rep_demo_dxtj` LIMIT 10; 
+6月 08, 2024 4:40:19 下午 com.zwy.appformysql.Helper.DatabaseHelper executeQuery
+信息: 执行查询SQL语句: CREATE DEFINER=`root`@`localhost` PROCEDURE `AddGeometryColumn`(catalog VARCHAR(64), t_schema VARCHAR(64),
+   t_name VARCHAR(64), geometry_column VARCHAR(64), t_srid INT)
+    SQL SECURITY INVOKER
+BEGIN
+  SET @qwe= CONCAT('ALTER TABLE ', t_schema, '.', t_name, ' ADD ', geometry_column,' GEOMETRY REF_SYSTEM_ID=', t_srid); PREPARE ls FROM @qwe; EXECUTE ls; DEALLOCATE PREPARE ls; END$$ 
+6月 08, 2024 4:40:39 下午 com.zwy.appformysql.Helper.DatabaseHelper executeQuery
+信息: 执行查询SQL语句: CREATE PROCEDURE `AddGeometryColumn`(catalog VARCHAR(64), t_schema VARCHAR(64),
+   t_name VARCHAR(64), geometry_column VARCHAR(64), t_srid INT)
+    SQL SECURITY INVOKER
+BEGIN
+  SET @qwe= CONCAT('ALTER TABLE ', t_schema, '.', t_name, ' ADD ', geometry_column,' GEOMETRY REF_SYSTEM_ID=', t_srid); PREPARE ls FROM @qwe; EXECUTE ls; DEALLOCATE PREPARE ls; END; 
+6月 08, 2024 4:42:16 下午 com.zwy.appformysql.Helper.DatabaseHelper executeQuery
+信息: 执行查询SQL语句: CREATE  PROCEDURE `proc_jmdemo111`(IN pageNo INT,IN pageSize INT)
+BEGIN
+		DECLARE begin_no INT;
+		SET begin_no = (pageNo-1)*pageSize;
+ 
+		-- 分页查询列表
+		SELECT * FROM rep_demo_dxtj
+		WHERE id >= (
+			SELECT id FROM rep_demo_dxtj
+			ORDER BY id ASC
+			LIMIT begin_no,1
+		)
+		ORDER BY id ASC
+		LIMIT pageSize;
+ 
+END； 

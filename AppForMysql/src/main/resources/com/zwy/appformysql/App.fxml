@@ -141,7 +141,7 @@
                         <Font size="8.0" />
                      </font>
                   </Label>
-                  <ChoiceBox id="PCID" fx:id="ServerName" maxHeight="25.0" maxWidth="72.0" minHeight="25.0" minWidth="50.0" onAction="#ChoicePCID" prefHeight="25.0" prefWidth="72.0" HBox.hgrow="ALWAYS">
+                  <ChoiceBox id="ServerName" fx:id="ServerName" maxHeight="25.0" maxWidth="72.0" minHeight="25.0" minWidth="50.0"  prefHeight="25.0" prefWidth="72.0" HBox.hgrow="ALWAYS">
                      <HBox.margin>
                         <Insets />
                      </HBox.margin>

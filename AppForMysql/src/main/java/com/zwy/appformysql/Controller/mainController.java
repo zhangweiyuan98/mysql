@@ -129,18 +129,7 @@ public class mainController {
 
     }
 
-    private void Exsql(StringBuilder sqlConcat, String host, String password, String database, String user) throws SQLException {
-        DatabaseHelper server = new DatabaseHelper(host, database, user, password);
 
-        ResultSet result = server.executeQuery(String.valueOf(sqlConcat));
-
-        ResultSetMetaData metaData = result.getMetaData();
-        List<String> columnNames = new ArrayList<>();
-        ResultTableManager manager = new ResultTableManager(ResultTable);
-        manager.setTableColumns(metaData, columnNames);
-        manager.updateTableItems(result);
-        ResultTable.setEditable(true);
-    }
 
 
     @FXML
@@ -152,8 +141,46 @@ public class mainController {
         System.out.println("选择了Exce;");
     }
     @FXML
-    private void onEutexSqlClick(){
-        System.out.println("点击了执行语句");
+    private void onEutexSqlClick() throws SQLException {
+        String sql = SqlText.getText();
+        System.out.println(sql);
+        String pcidValue = PCID.getValue();
+        ConfigurationReader Server = new ConfigurationReader("AppForMysql/"+pcidValue+".ini");
+        Set<String> sectionNames = Server.getSectionNames();
+        String server = ServerName.getValue();
+        StringBuilder SqlConcat = new StringBuilder(sql);
+
+        SqlConcat.append(" ");
+
+        if ("所有".equals(server)) {
+            // 如果PCID的值为"所有"，则遍历所有节
+            for (String sectionName : sectionNames) {
+                // 假设每个节都有相同的数据库配置键（host, password, database, user）
+                String host = Server.getValue(sectionName, "host");
+                String password = Server.getValue(sectionName, "password");
+                String database = Server.getValue(sectionName, "database");
+                String user = Server.getValue(sectionName, "user");
+
+                // 执行数据库查询等操作...
+//                Exsql(SqlConcat, host, password, database, user);
+                for (String s : Arrays.asList(host, password, database, user)) {
+                    System.out.println(s);
+                }
+
+            }
+        }else {
+
+            String host = Server.getValue(server,"host");
+        //String port = Server.getValue(PCID.getValue(),"port");
+            String password = Server.getValue(server,"password");
+            String database = Server.getValue(server,"database");
+            String user = Server.getValue(server,"user");
+            Exsql(SqlConcat, host, password, database, user);
+            for (String s : Arrays.asList(host, password, database, user)) {
+                System.out.println(s);
+            }
+
+        }
     }
     @FXML
     private void onExportExcelClick(){
@@ -228,7 +255,18 @@ public class mainController {
         GroupCheck.setDisable(flag );
 
     }
+    private void Exsql(StringBuilder sqlConcat, String host, String password, String database, String user) throws SQLException {
+        DatabaseHelper server = new DatabaseHelper(host, database, user, password);
 
+        ResultSet result = server.executeQuery(String.valueOf(sqlConcat));
+
+        ResultSetMetaData metaData = result.getMetaData();
+        List<String> columnNames = new ArrayList<>();
+        ResultTableManager manager = new ResultTableManager(ResultTable);
+        manager.setTableColumns(metaData, columnNames);
+        manager.updateTableItems(result);
+        ResultTable.setEditable(true);
+    }
 
 
 
