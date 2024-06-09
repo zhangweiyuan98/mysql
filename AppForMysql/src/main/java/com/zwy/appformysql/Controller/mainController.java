@@ -2,7 +2,7 @@ package com.zwy.appformysql.Controller;
 import com.zwy.appformysql.Config.ConfigurationReader;
 import com.zwy.appformysql.Helper.DatabaseHelper;
 
-
+import javafx.scene.control.Alert.AlertType;
 import com.zwy.appformysql.mapper.ResultTableManager;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.SimpleStringProperty;
@@ -10,8 +10,18 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
+import javafx.scene.input.Clipboard;
+import javafx.scene.input.ClipboardContent;
+import javafx.scene.input.KeyCode;
 
+import java.awt.*;
+import java.awt.datatransfer.StringSelection;
+import java.awt.datatransfer.Transferable;
 import java.io.InputStream;
 import java.io.Reader;
 import java.math.BigDecimal;
@@ -19,6 +29,7 @@ import java.net.URL;
 import java.sql.*;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class mainController {
@@ -121,6 +132,7 @@ public class mainController {
                 String password = Server.getValue(PCID.getValue(),"password");
                 String database = Server.getValue(PCID.getValue(),"database");
                 String user = Server.getValue(PCID.getValue(),"user");
+
                 Exsql(SqlConcat, host, password, database, user);
 
 
@@ -149,6 +161,18 @@ public class mainController {
         Set<String> sectionNames = Server.getSectionNames();
         String server = ServerName.getValue();
         StringBuilder SqlConcat = new StringBuilder(sql);
+
+        if (sql == null || sql.trim().isEmpty()) {
+            // 显示弹窗提示
+            Alert alert = new Alert(AlertType.ERROR);
+            alert.setTitle("错误");
+            alert.setHeaderText("输入不能为空");
+            alert.setContentText("请输入有效的SQL语句");
+            alert.showAndWait();
+
+            // 弹窗显示后，可以选择停止执行后续逻辑
+            return;
+        }
 
         SqlConcat.append(" ");
 
@@ -263,11 +287,17 @@ public class mainController {
         ResultSetMetaData metaData = result.getMetaData();
         List<String> columnNames = new ArrayList<>();
         ResultTableManager manager = new ResultTableManager(ResultTable);
+        ResultTable.setEditable(true);
+        // 设置选择模式为单个单元格（如果需要选择整行，可以使用tableView.getSelectionModel().setCellSelectionEnabled(false);）
+        ResultTable.getSelectionModel().setCellSelectionEnabled(true);
+
         manager.setTableColumns(metaData, columnNames);
         manager.updateTableItems(result);
-        ResultTable.setEditable(true);
-    }
 
+
+
+
+    }
 
 
 

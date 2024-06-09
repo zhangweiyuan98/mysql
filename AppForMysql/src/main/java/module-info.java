@@ -6,6 +6,8 @@ module com.zwy.appformysql {
     requires com.dlsc.formsfx;
     requires org.kordamp.bootstrapfx.core;
     requires java.sql;
+    requires java.datatransfer;
+    requires java.desktop;
 
 
     opens com.zwy.appformysql to javafx.fxml;
