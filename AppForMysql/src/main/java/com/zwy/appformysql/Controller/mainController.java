@@ -1,11 +1,10 @@
 package com.zwy.appformysql.Controller;
+
 import com.zwy.appformysql.Config.ConfigurationReader;
 import com.zwy.appformysql.Helper.DatabaseHelper;
 
 import javafx.scene.control.Alert.AlertType;
 import com.zwy.appformysql.mapper.ResultTableManager;
-import javafx.beans.property.ReadOnlyObjectWrapper;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -15,19 +14,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.input.Clipboard;
-import javafx.scene.input.ClipboardContent;
-import javafx.scene.input.KeyCode;
-
-import java.awt.*;
-import java.awt.datatransfer.StringSelection;
-import java.awt.datatransfer.Transferable;
-import java.io.InputStream;
-import java.io.Reader;
-import java.math.BigDecimal;
-import java.net.URL;
 import java.sql.*;
-import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -69,13 +56,14 @@ public class mainController {
     @FXML
     private ChoiceBox<String> ServerName;
     @FXML
-    private  Button EutexSql;
+    private Button EutexSql;
     @FXML
-    private  Button ExportExcel;
+    private Button ExportExcel;
     @FXML
-    private  TextArea SqlText;
-    @FXML
-    private TableView<List<String>> resultTable;
+    private TextArea SqlText;
+//    @FXML
+//    private TableView<List<String>> resultTable;
+
     @FXML
     private void onHelloButtonClick() {
         welcomeText.setText("Welcome to JavaFX Application!");
@@ -104,7 +92,7 @@ public class mainController {
         // 如果nonEmptyConditions为空，则可能需要处理这种情况
         if (nonEmptyConditions.isEmpty()) {
             // 没有添加任何条件，处理这种情况...
-            sql = "SELECT * FROM hotel limit "+Limit.getText(); // 或者抛出异常、返回空结果等
+            sql = "SELECT * FROM hotel limit " + Limit.getText(); // 或者抛出异常、返回空结果等
         }
         StringBuilder SqlConcat = new StringBuilder(sql);
         SqlConcat.append(" ORDER BY id ;");
@@ -125,15 +113,15 @@ public class mainController {
                 Exsql(SqlConcat, host, password, database, user);
 
             }
-        }else {
+        } else {
 
-                String host = Server.getValue(PCID.getValue(),"host");
-        //        String port = Server.getValue(PCID.getValue(),"port");
-                String password = Server.getValue(PCID.getValue(),"password");
-                String database = Server.getValue(PCID.getValue(),"database");
-                String user = Server.getValue(PCID.getValue(),"user");
+            String host = Server.getValue(PCID.getValue(), "host");
+            //        String port = Server.getValue(PCID.getValue(),"port");
+            String password = Server.getValue(PCID.getValue(), "password");
+            String database = Server.getValue(PCID.getValue(), "database");
+            String user = Server.getValue(PCID.getValue(), "user");
 
-                Exsql(SqlConcat, host, password, database, user);
+            Exsql(SqlConcat, host, password, database, user);
 
 
         }
@@ -142,27 +130,27 @@ public class mainController {
     }
 
 
-
-
     @FXML
-    private void onGroupCheckClick(){
+    private void onGroupCheckClick() {
         System.out.println("打开了导入数据");
     }
+
     @FXML
-    private void onChoiceExcelClick(){
+    private void onChoiceExcelClick() {
         System.out.println("选择了Exce;");
     }
+
     @FXML
     private void onEutexSqlClick() throws SQLException {
         String sql = SqlText.getText();
         System.out.println(sql);
         String pcidValue = PCID.getValue();
-        ConfigurationReader Server = new ConfigurationReader("AppForMysql/"+pcidValue+".ini");
+        ConfigurationReader Server = new ConfigurationReader("AppForMysql/" + pcidValue + ".ini");
         Set<String> sectionNames = Server.getSectionNames();
         String server = ServerName.getValue();
         StringBuilder SqlConcat = new StringBuilder(sql);
 
-        if (sql == null || sql.trim().isEmpty()) {
+        if (sql.trim().isEmpty()) {
             // 显示弹窗提示
             Alert alert = new Alert(AlertType.ERROR);
             alert.setTitle("错误");
@@ -192,13 +180,13 @@ public class mainController {
                 }
 
             }
-        }else {
+        } else {
 
-            String host = Server.getValue(server,"host");
-        //String port = Server.getValue(PCID.getValue(),"port");
-            String password = Server.getValue(server,"password");
-            String database = Server.getValue(server,"database");
-            String user = Server.getValue(server,"user");
+            String host = Server.getValue(server, "host");
+            //String port = Server.getValue(PCID.getValue(),"port");
+            String password = Server.getValue(server, "password");
+            String database = Server.getValue(server, "database");
+            String user = Server.getValue(server, "user");
             Exsql(SqlConcat, host, password, database, user);
             for (String s : Arrays.asList(host, password, database, user)) {
                 System.out.println(s);
@@ -206,8 +194,9 @@ public class mainController {
 
         }
     }
+
     @FXML
-    private void onExportExcelClick(){
+    private void onExportExcelClick() {
         System.out.println("点击了导出Excel");
     }
 
@@ -226,17 +215,18 @@ public class mainController {
 
 
     @FXML
-    private void  ChoicePCID(){
+    private void ChoicePCID() {
         // 获取所选的配置文件名称
         String selectedGroup = PCID.getValue();
-        if (selectedGroup.equals("所有")){
+        if (selectedGroup.equals("所有")) {
             ServerName.setDisable(true);
             ServerName.setValue("所有");
-        }else { ServerName.setDisable(false);
+        } else {
+            ServerName.setDisable(false);
 
             // 根据选择的配置文件名称获取对应的配置项
             try {
-                ConfigurationReader readerServer = new ConfigurationReader("AppForMysql/"+selectedGroup + ".ini");
+                ConfigurationReader readerServer = new ConfigurationReader("AppForMysql/" + selectedGroup + ".ini");
                 ObservableList<String> configOption = FXCollections.observableArrayList(readerServer.getSectionNames());
                 // 清空第二个下拉菜单的选项
                 ServerName.setItems(configOption);
@@ -245,40 +235,42 @@ public class mainController {
                 // 设置第二个下拉菜单的默认值（这里选择第一个选项）
                 if (!configOption.isEmpty()) {
                     ServerName.setValue(configOption.get(0));
-                } }
-            catch (Exception e) {
+                }
+            } catch (Exception e) {
                 // 将异常信息记录到日志中
                 System Logger = null;
-                System.Logger logger = Logger.getLogger(getClass().getName());
-                logger.log(System.Logger.Level.ERROR,"Error loading configuration for group: " + selectedGroup, e);
+                System.Logger logger = System.getLogger(getClass().getName());
+                logger.log(System.Logger.Level.ERROR, "Error loading configuration for group: " + selectedGroup, e);
             }
 
-        };
+        }
 
     }
 
     @FXML
     private void onEnableButtonClick() {
 
-       if(EnableButton.isSelected()) {
-           EnableButton.setText("关闭");
-           setImportOn(false);
+        if (EnableButton.isSelected()) {
+            EnableButton.setText("关闭");
+            setImportOn(false);
 
-       } else {
-           EnableButton.setText("启用");
-           setImportOn(true);
-       }
+        } else {
+            EnableButton.setText("启用");
+            setImportOn(true);
+        }
     }
+
     @FXML
-    private void  setImportOn(boolean flag ){
-        Databasename.setDisable(flag );
-        TableName.setDisable(flag );
-        ChoiceExcel.setDisable(flag );
-        ExcelSheet.setDisable(flag );
-        Import.setDisable(flag );
-        GroupCheck.setDisable(flag );
+    private void setImportOn(boolean flag) {
+        Databasename.setDisable(flag);
+        TableName.setDisable(flag);
+        ChoiceExcel.setDisable(flag);
+        ExcelSheet.setDisable(flag);
+        Import.setDisable(flag);
+        GroupCheck.setDisable(flag);
 
     }
+
     private void Exsql(StringBuilder sqlConcat, String host, String password, String database, String user) throws SQLException {
         DatabaseHelper server = new DatabaseHelper(host, database, user, password);
 
@@ -295,10 +287,7 @@ public class mainController {
         manager.updateTableItems(result);
 
 
-
-
     }
-
 
 
 }
